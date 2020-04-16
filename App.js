@@ -88,8 +88,7 @@ const StackConfig = {
       headerTintColor: white,
       headerStyle:{
         backgroundColor: purple
-      },
-      title: "Entry Detail"
+      }
     }
   }
 }
