@@ -11,7 +11,8 @@ import { connect } from 'react-redux'
 import { addEntry } from '../actions'
 import { getDailyReminderValue } from '../utils/helpers'
 import { white, purple } from '../utils/colors'
-
+import { CommonActions } from '@react-navigation/core';
+//import { CommonActions } from '@react-navigation/native';
 
 function SubmitBtn({onPress}){
     return(
@@ -85,7 +86,8 @@ class AddEntry extends Component{
         }))
 
         // Navigate to home
-
+        this.props.goBack()
+        //this.toHome()
         // Save to DB
         submitEntry({key, entry})
 
@@ -100,11 +102,17 @@ class AddEntry extends Component{
         }))
 
         // Navigate to home
-
+        this.props.goBack()
+        //this.toHome()
         // Save to DB
         removeEntry(key)
 
     }
+    /* toHome = () =>{
+        this.props.navigation.dispatch(CommonActions.goBack({
+            key: 'AddEntry'
+        }))
+    } */
     render(){
         const metaInfo = getMetricMetaInfo()
         if (this.props.alreadyLogged){
@@ -200,4 +208,11 @@ function mapStateToProps(state){
         alreadyLogged : state[key] && typeof state[key].today === 'undefined'
     }
 }
-export default connect(mapStateToProps)(AddEntry) 
+function mapDispatchToProps(dispatch, { navigation }){
+ 
+    return{
+        dispatch,
+        goBack: () => navigation.goBack()
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(AddEntry) 
