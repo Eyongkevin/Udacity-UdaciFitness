@@ -10,17 +10,21 @@ import { submitEntry, removeEntry } from '../utils/api'
 import { connect } from 'react-redux'
 import { addEntry } from '../actions'
 import { getDailyReminderValue } from '../utils/helpers'
-import { white, purple } from '../utils/colors'
+import { white, purple, gray, lightPurp } from '../utils/colors'
 import { CommonActions } from '@react-navigation/core';
 //import { CommonActions } from '@react-navigation/native';
 
-function SubmitBtn({onPress}){
+function SubmitBtn({onPress, disabled}){
     return(
         <TouchableOpacity 
-            style={Platform.OS === 'ios'
+            style={[Platform.OS === 'ios'
             ? styles.iosSubmitBtn
-            : styles.androidSubmitBtn}
-            onPress={onPress}>
+            : styles.androidSubmitBtn, 
+            disabled
+            ? styles.disabled
+            : null]}
+            onPress={onPress}
+            disabled = {disabled}>
             <Text style={styles.submitBtnText}>
                 SUBMIT
             </Text>
@@ -115,6 +119,9 @@ class AddEntry extends Component{
     } */
     render(){
         const metaInfo = getMetricMetaInfo()
+        const NotFilled = Object.keys(this.state).map((key) => this.state[key])
+                                .filter((filt) => filt != 0)
+
         if (this.props.alreadyLogged){
             return(
                 <View style={styles.center}>
@@ -153,7 +160,9 @@ class AddEntry extends Component{
                         </View>
                    )
                 })}
-                <SubmitBtn onPress={this.submit} />
+                <SubmitBtn 
+                    onPress={this.submit}
+                    disabled={NotFilled.length === 0? true: false } />
             </View>
         )
     }
@@ -200,6 +209,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginRight: 30,
         marginLeft: 30
+    },
+    disabled:{
+        backgroundColor:lightPurp, 
+        color: gray
     }
 })
 function mapStateToProps(state){
